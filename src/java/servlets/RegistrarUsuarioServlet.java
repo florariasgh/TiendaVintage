@@ -90,8 +90,8 @@ public class RegistrarUsuarioServlet extends HttpServlet {
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
                 rd.forward(request, response);
             } else {
-                // TODO: enviar a una pantalla de error con el mensaje
-                RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
+                request.setAttribute("mensaje", "El correo electronico ingresado ya esta registrado en Tienda Vintage.");
+                RequestDispatcher rd = getServletContext().getRequestDispatcher("/error.jsp");
                 rd.forward(request, response);
             }
     }

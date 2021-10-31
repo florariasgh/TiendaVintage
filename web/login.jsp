@@ -1,6 +1,6 @@
 <%-- 
-    Document   : login
-    Created on : 05/11/2020, 21:05:33
+    Document   : registrarUsuario
+    Created on : 31/10/2021, 16:15:56
     Author     : arias
 --%>
 
@@ -8,39 +8,30 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login Usuario</title>
-        <link href="./resources/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/blog.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container">
-         <header class="blog-header py-3">
-            <div class="row flex-nowrap justify-content-between align-items-center">
-               
-               <div class="col-4 text-center">
-                  <a class="blog-header-logo text-dark" href="/TiendaVintage/">Tienda Vintage</a>
-               </div>
+<%@ include file="components/meta.jsp" %>     
+<!-- BODY -->
+<%@ include file="components/header.jsp" %>    
+    <div class="container p-3">
+        <div class="row">
+            <div class="col-md-12">
+                <form method="POST" action="LoginServlet">
+                   <h1>Iniciar sesion</h1>
+                        <div class="form-group">
+                            <label for="txtUsuario">Usuario</label>
+                            <input type="text" class="form-control" name="txtUsuario"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtClave">Clave</label>
+                            <input type="password" class="form-control" name="txtClave"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+
+                </form>
             </div>
-         </header>
-         <form method="POST" action="LoginServlet">
-                <label for="txtUsuario">Usuario</label>
-                <input type="text" class="form-control" name="txtUsuario"/>
-                <label for="txtClave">Clave</label>
-                <input type="password" class="form-control" name="txtClave"/>
-
-                <button type="submit" class="btn btn-primary">Enviar</button>
-
-        </form>
-
-        <c:if test="${not empty error}">
-                <p style='color:red;'>Error: ${error}</p>	
-        </c:if>
-		
-    </body>
-</html>
+        </div>
+    </div>
+</body>
+<%@ include file="components/footer.jsp" %>
+<c:if test="${not empty error}">
+        <p style='color:red;'>Error: ${error}</p>	
+</c:if>

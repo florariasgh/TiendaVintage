@@ -5,13 +5,15 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <body>
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 
     <div class="container-fluid">
-      <a class="navbar-brand" href="https://getbootstrap.com/docs/5.1/examples/navbar-static/#">Tienda Vintage</a>
+      <a class="navbar-brand" href="/TiendaVintage">Tienda Vintage</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button> 
@@ -53,10 +55,15 @@
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       <div class="col-4 d-flex justify-content-end align-items-center">
-                    <a class="btn btn-sm btn-outline-secondary" href="/TiendaVintage/LoginServlet">Iniciar sesion</a>
-                     <a class="btn btn-sm btn-outline-secondary" href="/TiendaVintage/LogoutServlet">Cerrar sesion</a>
-                     <a class="btn btn-sm btn-outline-secondary" href="/TiendaVintage/RegistrarUsuarioServlet">Registrate</a>
-                     
+          <c:choose>
+            <c:when test="${not empty usuario}">
+              <a class="btn btn-sm btn-secondary" href="/TiendaVintage/LogoutServlet">Cerrar sesion</a>
+           </c:when>
+           <c:otherwise>
+             <a class="btn btn-sm btn-secondary" href="/TiendaVintage/LoginServlet">Iniciar sesion</a>
+             <a class="btn btn-sm btn-secondary" href="/TiendaVintage/RegistrarUsuarioServlet">Registrate</a>
+           </c:otherwise>
+          </c:choose>
       </div>
       </div>
     </div>
