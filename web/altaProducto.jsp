@@ -8,20 +8,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Subir productos</title>
-        <link href="./resources/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/blog.css" rel="stylesheet">
-    </head>
-    
-    <body>
-            <div class="container">
-            <div class="row">
+<%@ include file="components/meta.jsp" %>     
+<!-- BODY -->
+<%@ include file="components/header.jsp" %>    
+    <div class="container p-3">
+         <div class="row">
                 <div class="col-md-12">
                     <div class="well well-sm">
                          <form enctype="multipart/form-data" action="/TiendaVintage/ListadoProductoServlet" method="post">
@@ -76,6 +67,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </body>
-</html>
+    </div>
+</body>
+<%@ include file="components/footer.jsp" %>

@@ -4,23 +4,14 @@
     Author     : arias
 --%>
 
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="modelo.Producto"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Productos</title>
-        <link href="./resources/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/blog.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container">
+<%@ include file="components/meta.jsp" %>     
+<!-- BODY -->
+<%@ include file="components/header.jsp" %>    
+    <div class="container">
             <h1>Productos</h1>
                 <c:forEach var="producto" items="${lista}">
                     <div class="row">
@@ -45,6 +36,5 @@
                 </c:forEach>
             <a href="/TiendaVintage/index.jsp"><button type="button" class="btn btn-primary">Volver atras</button></a>
         </div>
-    </body>
-</html>
-
+</body>
+<%@ include file="components/footer.jsp" %>

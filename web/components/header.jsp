@@ -27,21 +27,40 @@
             <a class="nav-link" href="/TiendaVintage/AltaProductoServlet">Subir Productos</a>
           </li>
                   <li class="nav-item">
-            <a class="nav-link">Mi perfil</a>
+            <a class="nav-link" href="/TiendaVintage/PerfilUsuarioServlet">Mi perfil</a>
           </li>
           
+          <!-- MENU PRODUCTOS -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Categorias
+            <a href="/TiendaVintage/VerProductosServlet" class= "nav-link dropdown-toggle" id="navbarDropdown"  role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                   Productos
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a href="#"
+                          class="dropdown-item">
+                             Mujeres
+                      </a>
+                      
+                  </li>
+                  <li><a href="#"
+                          class="dropdown-item">
+                             Hombres
+                      </a>
+                      
+                  </li>
+                  <li><a href="#"
+                          class="dropdown-item">
+                             Unisex
+                      </a>
+                      
+                  </li>
+              </ul>
           </li>
           
-                  <li class="nav-item">
+          <!-- FIN MENU PRODUCTOS -->
+          
+          <li class="nav-item">
             <a class="nav-link">Mis ventas</a>
           </li>
                   <li class="nav-item">
