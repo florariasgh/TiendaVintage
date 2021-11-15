@@ -77,22 +77,27 @@ public class LoginServlet extends HttpServlet {
             String clave = request.getParameter("txtClave");
             Usuario u;
         try {
-            u = g.existeUsuario(usuario, clave);
-            if(u != null ) {
-                    // usuario valido
+            if (usuario.equals("admin")) {
+                if (clave.equals("123456")) {
+                        request.getSession().setAttribute("usuario", "admin");
 
-                    // setear variable de sesión 
-                    request.getSession().setAttribute("usuario", u.getId());
-
-                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-                    rd.forward(request, response);
+                        RequestDispatcher rd = getServletContext().getRequestDispatcher("/indexAdmin.jsp");
+                        rd.forward(request, response);
+                }
             } else {
-			
-                    request.setAttribute("error", "Usuario o contraseña incorrecta incorrecto");
+                u = g.existeUsuario(usuario, clave);
+                if(u != null ) {
+                        request.getSession().setAttribute("usuario", u.getId());
 
-                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
-                    rd.forward(request, response);
+                        RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
+                        rd.forward(request, response);
+                }
             }
+
+            request.setAttribute("error", "Usuario o contraseña incorrecta incorrecto");
+
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            rd.forward(request, response);
         } catch (Exception ex) {
                 Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

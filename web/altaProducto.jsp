@@ -15,7 +15,7 @@
          <div class="row">
                 <div class="col-md-12">
                     <div class="well well-sm">
-                         <form enctype="multipart/form-data" action="/TiendaVintage/ListadoProductoServlet" method="post">
+                         <form enctype="multipart/form-data" action="/TiendaVintage/AltaProductoServlet" method="post">
                             <fieldset>
                                 <legend class="text-center header">Subir Productos</legend>
 

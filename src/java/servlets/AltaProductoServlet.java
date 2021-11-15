@@ -28,7 +28,7 @@ import modelo.GestorDB;
  * @author arias
  */
 @WebServlet(name = "AltaProductoServlet", urlPatterns = {"/AltaProductoServlet"})
-@MultipartConfig 
+@MultipartConfig(location="C:\\Users\\arias\\Documents\\TiendaVintageRepositorio")
 public class AltaProductoServlet extends HttpServlet {
 
     /**
@@ -122,12 +122,13 @@ public class AltaProductoServlet extends HttpServlet {
             producto.setCategoria(categoria);
             producto.setGenero(genero);
             producto.setTalle(talle);
+            producto.setNombreFoto(nombreFoto);
             producto.setUsuario(g.obtenerUsuario((Integer) request.getSession().getAttribute("usuario")));
             
             g.insertarProducto(producto);
             
             
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/verProductos.jsp");
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/VerProductosServlet");
             rd.forward(request, response);
     }
 

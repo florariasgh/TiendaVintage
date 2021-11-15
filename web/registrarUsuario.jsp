@@ -66,7 +66,7 @@
                     }
                     let txtApellido = document.getElementById("txtApellido").value;
                     if (!txtApellido) {
-                            alert("Debe incluir un nombre");
+                            alert("Debe incluir un apellido");
                             return false;
                     }
                     let txtEmail = document.getElementById("txtEmail").value;

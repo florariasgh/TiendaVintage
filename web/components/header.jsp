@@ -23,13 +23,26 @@
           <li class="nav-item">
             <a class="nav-link" href="/TiendaVintage/">Inicio</a>
           </li>
+          
+          <c:if test="${not empty usuario}">
+        
           <li class="nav-item">
             <a class="nav-link" href="/TiendaVintage/AltaProductoServlet">Subir Productos</a>
           </li>
-                  <li class="nav-item">
+          
+          <li class="nav-item">
             <a class="nav-link" href="/TiendaVintage/PerfilUsuarioServlet">Mi perfil</a>
           </li>
           
+          <li class="nav-item">
+            <a class="nav-link">Mis ventas</a>
+          </li>
+                  <li class="nav-item">
+            <a class="nav-link">Mis compras</a>
+          </li>
+          
+          </c:if>
+                  
           <!-- MENU PRODUCTOS -->
           <li class="nav-item dropdown">
             <a href="/TiendaVintage/VerProductosServlet" class= "nav-link dropdown-toggle" id="navbarDropdown"  role="button"
@@ -37,12 +50,20 @@
                    Productos
             </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a href="/TiendaVintage/VerProductosServlet"
+                          class="dropdown-item">
+                             Ver todo
+                      </a>
+                      
+                  </li>
+                  
                   <li><a href="#"
                           class="dropdown-item">
                              Mujeres
                       </a>
                       
                   </li>
+                  
                   <li><a href="#"
                           class="dropdown-item">
                              Hombres
@@ -60,12 +81,7 @@
           
           <!-- FIN MENU PRODUCTOS -->
           
-          <li class="nav-item">
-            <a class="nav-link">Mis ventas</a>
-          </li>
-                  <li class="nav-item">
-            <a class="nav-link">Mis compras</a>
-          </li>
+          
           
         </ul>
         

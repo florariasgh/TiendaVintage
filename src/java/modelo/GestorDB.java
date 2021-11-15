@@ -577,7 +577,7 @@ public class GestorDB {
                                 int usuario = rs.getInt("id_usuario");
                                 int talle = rs.getInt("id_talle");
                                 int genero = rs.getInt("id_genero");
-                                String nombreFoto = rs.getString("nombreFoto");
+                                String nombreFoto = rs.getString("nombre_foto");
                                 
                         producto = new Producto(id, nombre, obtenerCategoria(categoria), precio, descripcion, disponible,
                         obtenerUsuario(usuario), obtenerTalle(talle), obtenerGenero(genero), nombreFoto);
