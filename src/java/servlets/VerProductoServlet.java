@@ -7,15 +7,12 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.FormaDePago;
 import modelo.GestorDB;
 import modelo.Producto;
 import modelo.Venta;
@@ -24,8 +21,8 @@ import modelo.Venta;
  *
  * @author arias
  */
-@WebServlet(name = "ComprarServlet", urlPatterns = {"/ComprarServlet"})
-public class ComprarServlet extends HttpServlet {
+@WebServlet(name = "VerProductoServlet", urlPatterns = {"/VerProductoServlet"})
+public class VerProductoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,7 +41,7 @@ public class ComprarServlet extends HttpServlet {
         Producto p = g.obtenerProducto(Integer.parseInt(id));
         request.setAttribute("producto", p);
         
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/comprarProducto.jsp");
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/verProducto.jsp");
         rd.forward(request, response);
     }
 
@@ -74,20 +71,7 @@ public class ComprarServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        GestorDB g = new GestorDB();
-        int id = Integer.parseInt((String) request.getParameter("id"));
-        int idUsuario = (Integer) request.getSession().getAttribute("usuario");
-        
-        Producto p = g.obtenerProducto(id);
-        request.setAttribute("producto", p);
-        
-        p.setDisponible(false);
-        g.actualizarProducto(p);
-        java.sql.Date now = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        g.insertarVenta(new Venta(0, now, p, new FormaDePago(5,""), g.obtenerUsuario(idUsuario), p.getUsuario(), false));
-         
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/compraRealizada.jsp");
-        rd.forward(request, response);
+        processRequest(request, response);
     }
 
     /**

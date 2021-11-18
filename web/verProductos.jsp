@@ -24,6 +24,7 @@
                             <div class="part-2">
                                 <h3 class="product-title">${producto.nombre}</h3>
                                 <h4 class="product-price">${producto.precio}</h4>
+                                <a href="/TiendaVintage/VerProductoServlet?id=${producto.id}" ><button type="button" class="btn btn-info">Ver</button></a>
                                 <a href="/TiendaVintage/ComprarServlet?id=${producto.id}" ><button type="button" class="btn btn-dark">Comprar</button></a>
                             </div>
                         </div>

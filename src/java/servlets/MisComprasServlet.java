@@ -18,13 +18,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Producto;
+import modelo.Venta;
 
 /**
  *
  * @author arias
  */
-@WebServlet(name = "ListadoProductoServlet", urlPatterns = {"/ListadoProductoServlet"})
-public class ListadoProductoServlet extends HttpServlet {
+@WebServlet(name = "MisComprasServlet", urlPatterns = {"/MisComprasServlet"})
+public class MisComprasServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,11 +42,11 @@ public class ListadoProductoServlet extends HttpServlet {
                 if (request.getSession().getAttribute("usuario") != null) {
                     GestorDB g = new GestorDB();
                     int idUsuario = (Integer) request.getSession().getAttribute("usuario");
-                    ArrayList<Producto> productos = g.obtenerProductos(idUsuario);
+                    ArrayList<Venta> productos = g.obtenerCompras(idUsuario);
 
                     request.setAttribute("lista", productos);
 
-                    rd = getServletContext().getRequestDispatcher("/listadoProducto.jsp");
+                    rd = getServletContext().getRequestDispatcher("/misCompras.jsp");
                 } else {
                     rd = getServletContext().getRequestDispatcher("/login.jsp");
                 }
@@ -69,7 +70,7 @@ public class ListadoProductoServlet extends HttpServlet {
             try {
             processRequest(request, response);
             } catch (Exception ex) {
-                Logger.getLogger(ListadoProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MisComprasServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     /**
@@ -86,7 +87,7 @@ public class ListadoProductoServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(ListadoProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MisComprasServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -7,25 +7,24 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.FormaDePago;
 import modelo.GestorDB;
-import modelo.Producto;
 import modelo.Venta;
 
 /**
  *
  * @author arias
  */
-@WebServlet(name = "ComprarServlet", urlPatterns = {"/ComprarServlet"})
-public class ComprarServlet extends HttpServlet {
+@WebServlet(name = "MisVentasServlet", urlPatterns = {"/MisVentasServlet"})
+public class MisVentasServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,17 +36,24 @@ public class ComprarServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        GestorDB g = new GestorDB();
-        String id = (String) request.getParameter("id");
-        
-        Producto p = g.obtenerProducto(Integer.parseInt(id));
-        request.setAttribute("producto", p);
-        
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/comprarProducto.jsp");
-        rd.forward(request, response);
-    }
+           throws ServletException, IOException {
+                RequestDispatcher rd;
+                if (request.getSession().getAttribute("usuario") != null) {
+                    GestorDB g = new GestorDB();
+                    int idUsuario = (Integer) request.getSession().getAttribute("usuario");
+                    ArrayList<Venta> productos = g.obtenerVentas(idUsuario);
 
+                    request.setAttribute("lista", productos);
+
+                    rd = getServletContext().getRequestDispatcher("/misVentas.jsp");
+                } else {
+                    rd = getServletContext().getRequestDispatcher("/login.jsp");
+                }
+                
+		rd.forward(request, response);
+        
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -59,9 +65,13 @@ public class ComprarServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+          throws ServletException, IOException  {
+            try {
+            processRequest(request, response);
+            } catch (Exception ex) {
+                Logger.getLogger(MisVentasServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -74,20 +84,11 @@ public class ComprarServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        GestorDB g = new GestorDB();
-        int id = Integer.parseInt((String) request.getParameter("id"));
-        int idUsuario = (Integer) request.getSession().getAttribute("usuario");
-        
-        Producto p = g.obtenerProducto(id);
-        request.setAttribute("producto", p);
-        
-        p.setDisponible(false);
-        g.actualizarProducto(p);
-        java.sql.Date now = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        g.insertarVenta(new Venta(0, now, p, new FormaDePago(5,""), g.obtenerUsuario(idUsuario), p.getUsuario(), false));
-         
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/compraRealizada.jsp");
-        rd.forward(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(MisVentasServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

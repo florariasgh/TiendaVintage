@@ -26,6 +26,54 @@
             </div>
         </div>
     </div>
-</div>
+    <hr/>
+    <h2>Productos subidos</h2>
+    <div class="row d-flex justify-content-center">
+		<table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Descripcion</th>
+                                    <th scope="col">Talle</th>
+                                    <th scope="col">Genero</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                        <tbody>
+			<c:forEach var="producto" items="${lista}">
+				<tr>
+                                    <td>${producto.nombre}</td>
+                                    <td>${producto.categoria.nombre}</td>
+                                    <td>$ ${producto.precio}</td>
+                                    <td>${producto.descripcion}</td>
+                                    <td>${producto.talle.nombre}</td>
+                                    <td>${producto.genero.nombre}</td>
+                                    <td>
+                                        
+                                        <c:if test="${user.getId() == usuario}">
+                                            <a href="/TiendaVintage/ModificarProductoServlet?id=${producto.id}">
+                                                <button class="btn btn-success" type="button">Editar</button>
+                                            </a>
+                                        </c:if>
+                                        <c:if test="${user.getId() == usuario}">
+                                            <a href="/TiendaVintage/EliminarProductoServlet?id=${producto.id}">
+                                                <button class="btn btn-danger" type="button">Eliminar</button>
+                                            </a>
+                                        </c:if>
+                                        <c:if test="${user.getId() != usuario}">
+                                            <a href="/TiendaVintage/VerProductoServlet?id=${producto.id}">
+                                                <button class="btn btn-primary" type="button">Ver</button>
+                                            </a>
+                                        </c:if>
+                                    </td>
+				</tr>
+			</c:forEach>
+                        </tbody>
+		</table>
+            </div>
+        </div> 
 </body>
 <%@ include file="components/footer.jsp" %>

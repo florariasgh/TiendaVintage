@@ -38,8 +38,12 @@ public class VerProductosServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
                 GestorDB g = new GestorDB();
-		ArrayList<Producto> productos = g.obtenerProductos(0);
-
+                ArrayList<Producto> productos = null;
+                int genero = 0;
+                if (request.getParameter("genero") != null) {
+                    genero = Integer.parseInt(request.getParameter("genero"));
+                }
+                productos = g.obtenerProductos(0, true, genero);
 		request.setAttribute("lista", productos);
 
 		RequestDispatcher rd = getServletContext().getRequestDispatcher("/verProductos.jsp");
@@ -62,7 +66,7 @@ public class VerProductosServlet extends HttpServlet {
             try {
             processRequest(request, response);
             } catch (Exception ex) {
-                Logger.getLogger(ListadoProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MisComprasServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

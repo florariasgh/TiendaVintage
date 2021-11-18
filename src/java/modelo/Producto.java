@@ -18,13 +18,13 @@ public class Producto {
     private float precio;
     private String descripcion;
     private Date fechaDeIngreso;
-    private String disponible;
+    private boolean disponible;
     private Usuario usuario;
     private Talle talle;
     private Genero genero;
     private String nombreFoto;
 
-    public Producto(int id, String nombre, Categoria categoria, float precio, String descripcion,  String disponible, Usuario usuario, Talle talle, Genero genero, String nombreFoto) {
+    public Producto(int id, String nombre, Categoria categoria, float precio, String descripcion, boolean disponible, Usuario usuario, Talle talle, Genero genero, String nombreFoto) {
         this.id = id;
         this.nombre = nombre;
         this.categoria = categoria;
@@ -97,11 +97,11 @@ public class Producto {
         this.fechaDeIngreso = fechaDeIngreso;
     }
 
-    public String getDisponible() {
+    public boolean getDisponible() {
         return disponible;
     }
 
-    public void setDisponible(String disponible) {
+    public void setDisponible(boolean disponible) {
         this.disponible = disponible;
     }
 

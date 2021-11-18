@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -543,7 +544,7 @@ public class GestorDB {
                         st.setInt(2, producto.getCategoria().getId());
                         st.setFloat(3, producto.getPrecio());
                         st.setString(4, producto.getDescripcion());
-                        st.setString(5, producto.getDisponible());
+                        st.setBoolean(5, producto.getDisponible());
                         st.setInt(6, producto.getUsuario().getId());
                         st.setInt(7, producto.getTalle().getId());
                         st.setInt(8, producto.getGenero().getId());
@@ -573,7 +574,7 @@ public class GestorDB {
                                 int categoria = rs.getInt("id_categoria");
                                 float precio = rs.getFloat("precio");
                                 String descripcion = rs.getString("descripcion");
-                                String disponible = rs.getString("disponible");
+                                boolean disponible = rs.getBoolean("disponible");
                                 int usuario = rs.getInt("id_usuario");
                                 int talle = rs.getInt("id_talle");
                                 int genero = rs.getInt("id_genero");
@@ -591,15 +592,20 @@ public class GestorDB {
 		return producto;
     }
     
-    public ArrayList<Producto> obtenerProductos(int idUsuario) {
+    public ArrayList<Producto> obtenerProductos(int idUsuario, boolean disponible, int generoFiltro) {
         String sql;
         ArrayList<Producto> lista = new ArrayList<Producto>();
         try {
                 abrirConexion();
                 if (idUsuario == 0)
-                    sql = "select * from Productos";
+                    sql = "select * from Productos WHERE 1=1";
                 else
                     sql = "select * from Productos where id_usuario=" + idUsuario;
+                if (disponible)
+                    sql += " AND disponible=1";
+                if (generoFiltro != 0)
+                    sql += " AND id_genero=" + generoFiltro;
+                
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
@@ -608,7 +614,7 @@ public class GestorDB {
                         Categoria categoria = obtenerCategoria(rs.getInt("id_categoria"));
                         float precio = rs.getFloat("precio");
                         String descripcion = rs.getString("descripcion");
-                        String disponible = rs.getString("disponible");
+                        boolean disp = rs.getBoolean("disponible");
                         int usuario = rs.getInt("id_usuario");
                         Talle talle = obtenerTalle(rs.getInt("id_talle"));
                         Genero genero = obtenerGenero(rs.getInt("id_genero"));
@@ -624,4 +630,208 @@ public class GestorDB {
         }
         return lista;
     }
+    
+    public boolean modificarProducto(Producto producto) {
+		boolean inserto = false;
+		try {
+			abrirConexion();
+			String sql = "UPDATE Productos SET nombre=?,idCategoria=?, precio=?, descripcion=?, disponible=?, idUsuario=?, idTalle=?, idGenero=?, nombreFoto=? WHERE id=?";
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, producto.getNombre());
+                        st.setInt(2, producto.getCategoria().getId());
+                        st.setFloat(3, producto.getPrecio());
+                        st.setString(4, producto.getDescripcion());
+                        st.setBoolean(5, producto.getDisponible());
+                        st.setInt(6, producto.getUsuario().getId());
+                        st.setInt(7, producto.getTalle().getId());
+                        st.setInt(8, producto.getGenero().getId());
+                        st.setString(9, producto.getNombreFoto());
+                        
+			st.executeUpdate();
+			inserto = true;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+
+		return inserto;
+	}
+    
+    public void eliminarProducto(int idProducto) {
+		Producto producto = null;
+		try {
+			abrirConexion();
+			String sql = "DELETE FROM Productos WHERE id = ?;";
+			PreparedStatement st = con.prepareStatement(sql);
+                        st.setInt(1, idProducto);
+                        st.execute();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+    }
+    
+    public ArrayList<Venta> obtenerVentas(int idUsuario) {
+        String sql;
+        ArrayList<Venta> lista = new ArrayList<Venta>();
+        try {
+                abrirConexion();
+                sql = "select * from Ventas where id_vendedor=" + idUsuario;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                        int id = rs.getInt("id");
+                        Date fecha = rs.getDate("fecha");
+                        Producto producto = obtenerProducto(rs.getInt("id_producto"));
+                        FormaDePago formaDePago = obtenerFormaDePago(rs.getInt("id_forma_de_pago"));
+                        Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
+                        Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
+                        boolean cancelado = rs.getBoolean("cancelado");
+
+                        lista.add(new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado));
+                }
+                rs.close();
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+        return lista;
+    }
+    
+    public ArrayList<Venta> obtenerCompras(int idUsuario) {
+        String sql;
+        ArrayList<Venta> lista = new ArrayList<Venta>();
+        try {
+                abrirConexion();
+                sql = "select * from Ventas where id_comprador=" + idUsuario;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                        int id = rs.getInt("id");
+                        Date fecha = rs.getDate("fecha");
+                        Producto producto = obtenerProducto(rs.getInt("id_producto"));
+                        FormaDePago formaDePago = obtenerFormaDePago(rs.getInt("id_forma_de_pago"));
+                        Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
+                        Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
+                        boolean cancelado = rs.getBoolean("cancelado");
+
+                        lista.add(new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado));
+                }
+                rs.close();
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+        return lista;
+    }
+    
+    /* COMPRAS DEL USUARIO*/
+
+    public void actualizarProducto(Producto producto) {
+        boolean inserto = false;
+            try {
+                abrirConexion();
+                String sql = "UPDATE Productos "
+                        + "SET nombre=?,id_categoria=?,"
+                        + "precio=?,descripcion=?,disponible=?,"
+                        + "id_usuario=?,id_talle=?,id_genero=?,"
+                        + "nombre_foto=? WHERE id=?";
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setString(1, producto.getNombre());
+                st.setInt(2, producto.getCategoria().getId());
+                st.setFloat(3, producto.getPrecio());
+                st.setString(4, producto.getDescripcion());
+                st.setBoolean(5, producto.getDisponible());
+                st.setInt(6, producto.getUsuario().getId());
+                st.setInt(7, producto.getTalle().getId());
+                st.setInt(8, producto.getGenero().getId());
+                st.setString(9, producto.getNombreFoto());
+                st.setInt(10, producto.getId());
+
+                st.execute();
+                inserto = true;
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                cerrarConexion();
+            } 
+    }
+
+    public void insertarVenta(Venta venta) {
+        boolean inserto = false;
+        try {
+                abrirConexion();
+                String sql = "INSERT INTO Ventas (fecha,id_producto,id_forma_de_pago,id_comprador,id_vendedor, cancelado) VALUES (?,?,?,?,?)";
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setDate(1, venta.getFecha());
+                st.setInt(2, venta.getProducto().getId());
+                st.setInt(3, venta.getFormaDePago().getId());
+                st.setInt(4, venta.getComprador().getId());
+                st.setInt(5, venta.getVendedor().getId());
+                st.setBoolean(5, venta.isCancelado());
+
+                st.execute();
+                inserto = true;
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+    }
+
+    public Venta obtenerVenta(int id) {
+        String sql;
+        Venta venta = null;
+        try {
+                abrirConexion();
+                sql = "select * from Ventas where id=" + id;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                        Date fecha = rs.getDate("fecha");
+                        Producto producto = obtenerProducto(rs.getInt("id_producto"));
+                        FormaDePago formaDePago = obtenerFormaDePago(rs.getInt("id_forma_de_pago"));
+                        Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
+                        Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
+                        boolean cancelado = rs.getBoolean("cancelado");
+
+                        venta = new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado);
+                }
+                rs.close();
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+        return venta;
+    }
+
+    public void actualizarVenta(Venta v) {
+        try {
+            abrirConexion();
+            String sql = "UPDATE Ventas "
+                    + "SET fecha=?,id_producto=?,"
+                    + "id_forma_de_pago=?,id_comprador=?,id_vendedor=?,cancelado=?"
+                    + " WHERE id=?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setDate(1, v.getFecha());
+            st.setInt(2, v.getProducto().getId());
+            st.setInt(3, v.getFormaDePago().getId());
+            st.setInt(4, v.getComprador().getId());
+            st.setInt(5, v.getVendedor().getId());
+            st.setBoolean(6, v.isCancelado());
+            st.setInt(7, v.getId());
+            st.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion();
+        } 
+    }
+        
+    
 }

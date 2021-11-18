@@ -1,6 +1,6 @@
 <%-- 
-    Document   : altaCategoria
-    Created on : 28/09/2021, 21:01:30
+    Document   : modificarProducto
+    Created on : 17/11/2021, 17:50:55
     Author     : arias
 --%>
 
@@ -15,16 +15,17 @@
          <div class="row">
                 <div class="col-md-12">
                     <div class="well well-sm">
-                         <form enctype="multipart/form-data" action="/TiendaVintage/AltaProductoServlet" method="post">
+                         <form enctype="multipart/form-data" action="/TiendaVintage/ModificarProductoServlet" method="post">
                             <fieldset>
-                                <legend class="text-center header">Subir Productos</legend>
+                                <legend class="text-center header">Modificar Producto</legend>
 
                                 <div class="form-group">
+                                    <input type="hidden" name="id" value="${id}" />
                                     <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
                                     <div class="col-md-8">
-                                        <input id="txtNombre" name="nombre" type="text" placeholder="Agregar titulo" class="form-control">
-                                        <input id="txtDescripcion" name="descripcion" type="text" placeholder="Agregar descripcion" class="form-control">
-                                        <input id="txtPrecio" name="precio" type="text" placeholder="Agregar precio" class="form-control">
+                                        <input id="txtNombre" name="nombre" type="text" placeholder="Agregar titulo" class="form-control" value="${nombre}">
+                                        <input id="txtDescripcion" name="descripcion" type="text" placeholder="Agregar descripcion" class="form-control" value="${descripcion}">
+                                        <input id="txtPrecio" name="precio" type="text" placeholder="Agregar precio" class="form-control" value="${precio}">
 
                                         <div class="form-group">
                                                 <label for="cboCategoria">Categoria</label>
@@ -57,7 +58,7 @@
                               
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button type="submit" class="btn btn-primary btn-lg">Agregar producto</button>
+                                        <button type="submit" class="btn btn-primary btn-lg">Modificar</button>
                                         <button class="btn btn-primary btn-lg">Cancelar</button>
                                     </div>
                                 </div>

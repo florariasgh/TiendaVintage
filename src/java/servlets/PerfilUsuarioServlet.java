@@ -7,6 +7,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.GestorDB;
+import modelo.Producto;
 import modelo.Usuario;
 
 /**
@@ -50,8 +52,17 @@ public class PerfilUsuarioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         GestorDB g = new GestorDB();
-        Usuario usuario = g.obtenerUsuario((Integer) request.getSession().getAttribute("usuario"));
+        int idUsuario;
+        String paramUsuario = request.getParameter("id");
+        if (paramUsuario == null) {
+            idUsuario = (Integer) request.getSession().getAttribute("usuario");
+        } else {
+            idUsuario = Integer.parseInt(paramUsuario);
+        }
+        Usuario usuario = g.obtenerUsuario(idUsuario);
         request.setAttribute("user", usuario);
+        ArrayList<Producto> productos = g.obtenerProductos(idUsuario, false, 0);
+        request.setAttribute("lista", productos);
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/perfilUsuario.jsp");
         rd.forward(request, response);
     }

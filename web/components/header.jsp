@@ -35,10 +35,10 @@
           </li>
           
           <li class="nav-item">
-            <a class="nav-link">Mis ventas</a>
+            <a class="nav-link"href="/TiendaVintage/MisVentasServlet">Mis ventas</a>
           </li>
                   <li class="nav-item">
-            <a class="nav-link">Mis compras</a>
+            <a class="nav-link" href="/TiendaVintage/MisComprasServlet">Mis compras</a>
           </li>
           
           </c:if>
@@ -57,20 +57,20 @@
                       
                   </li>
                   
-                  <li><a href="#"
+                  <li><a href="/TiendaVintage/VerProductosServlet?genero=2"
                           class="dropdown-item">
                              Mujeres
                       </a>
                       
                   </li>
                   
-                  <li><a href="#"
+                  <li><a href="/TiendaVintage/VerProductosServlet?genero=3"
                           class="dropdown-item">
                              Hombres
                       </a>
                       
                   </li>
-                  <li><a href="#"
+                  <li><a href="/TiendaVintage/VerProductosServlet?genero=1"
                           class="dropdown-item">
                              Unisex
                       </a>
