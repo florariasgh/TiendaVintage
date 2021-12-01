@@ -21,7 +21,7 @@
                             <th scope="col">Precio</th>
                             <th scope="col">Cliente</th>
                             <th scope="col">Email cliente</th>
-                            <th scope="col"></th>
+                            <th scope="col">Calificacion</th>
                         </tr>
                     </thead>
                 <tbody>

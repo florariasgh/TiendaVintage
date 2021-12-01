@@ -21,7 +21,8 @@
                                     <th scope="col">Precio</th>
                                     <th scope="col">Vendedor</th>
                                     <th scope="col">Email vendedor</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">Calificar compra</th>
+                                    <th scope="col">Realizar reclamo</th>
                                 </tr>
                             </thead>
                         <tbody>
@@ -31,6 +32,21 @@
                                     <td>$ ${compra.producto.precio}</td>
                                     <td>${compra.vendedor.nombre}  ${compra.vendedor.apellido}</td>
                                     <td>${compra.vendedor.email}</td>
+                                    <td>
+                                        <select name="cboValoracion${producto.id}" >
+                                            <option value='5'>⭐⭐⭐⭐⭐</option>
+                                            <option value='4'>⭐⭐⭐⭐</option>
+                                            <option value='3'>⭐⭐⭐</option>
+                                            <option value='2'>⭐⭐</option>
+                                            <option value='1'>⭐</option>
+                                        </select>
+                                        <a href="javascript:guardarValoracion(${producto.id});">
+                                            <button class="btn btn-primary" type="button">Enviar</button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" type="button">Reclamar</button>
+                                    </td>
 				</tr>
 			</c:forEach>
                         </tbody>
@@ -38,4 +54,10 @@
             </div>
          
 </div>
+<script>
+    function guardarValoracion(id) {
+        console.log(id);
+        return "/TiendaVintage/GuardarValoracion?id=" + id + "&valoracion=" + $(`select[name="cboValoracion${producto.id}"]`).value;
+    }
+    </script>
 <%@ include file="components/footer.jsp" %>

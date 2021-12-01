@@ -635,7 +635,7 @@ public class GestorDB {
 		boolean inserto = false;
 		try {
 			abrirConexion();
-			String sql = "UPDATE Productos SET nombre=?,idCategoria=?, precio=?, descripcion=?, disponible=?, idUsuario=?, idTalle=?, idGenero=?, nombreFoto=? WHERE id=?";
+			String sql = "UPDATE Productos SET nombre=?,id_categoria=?, precio=?, descripcion=?, disponible=?, id_usuario=?, id_talle=?, id_genero=?, nombre_foto=? WHERE id=?";
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setString(1, producto.getNombre());
                         st.setInt(2, producto.getCategoria().getId());
@@ -646,6 +646,7 @@ public class GestorDB {
                         st.setInt(7, producto.getTalle().getId());
                         st.setInt(8, producto.getGenero().getId());
                         st.setString(9, producto.getNombreFoto());
+                        st.setInt(10, producto.getId());
                         
 			st.executeUpdate();
 			inserto = true;
@@ -665,7 +666,7 @@ public class GestorDB {
 			String sql = "DELETE FROM Productos WHERE id = ?;";
 			PreparedStatement st = con.prepareStatement(sql);
                         st.setInt(1, idProducto);
-                        st.execute();
+                        st.executeUpdate();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -765,14 +766,14 @@ public class GestorDB {
         boolean inserto = false;
         try {
                 abrirConexion();
-                String sql = "INSERT INTO Ventas (fecha,id_producto,id_forma_de_pago,id_comprador,id_vendedor, cancelado) VALUES (?,?,?,?,?)";
+                String sql = "INSERT INTO Ventas (fecha,id_producto,id_forma_de_pago,id_comprador,id_vendedor, cancelado) VALUES (?,?,?,?,?,?)";
                 PreparedStatement st = con.prepareStatement(sql);
                 st.setDate(1, venta.getFecha());
                 st.setInt(2, venta.getProducto().getId());
                 st.setInt(3, venta.getFormaDePago().getId());
                 st.setInt(4, venta.getComprador().getId());
                 st.setInt(5, venta.getVendedor().getId());
-                st.setBoolean(5, venta.isCancelado());
+                st.setBoolean(6, venta.isCancelado());
 
                 st.execute();
                 inserto = true;
@@ -831,6 +832,80 @@ public class GestorDB {
         } finally {
             cerrarConexion();
         } 
+    }
+
+    public ArrayList<Consulta> obtenerConsultas(int id) {
+        String sql;
+        ArrayList<Consulta> consultas = new ArrayList<Consulta>();
+        try {
+                abrirConexion();
+                sql = "select * from Consultas where id_producto=" + id;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                        String consulta = rs.getString("consulta");
+                        Producto producto = obtenerProducto(rs.getInt("id_producto"));
+                        Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
+                        Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
+
+                        consultas.add(new Consulta(id, rs.getDate("fecha"), consulta, comprador, vendedor, producto));
+                }
+                rs.close();
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+        return consultas;   
+    }
+
+    public void insertarConsulta(Consulta c) {
+        boolean inserto = false;
+        try {
+                abrirConexion();
+                String sql = "INSERT INTO Consultas (fecha,consulta,id_comprador,id_vendedor, id_producto) VALUES (?,?,?,?,?)";
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setDate(1, c.getFecha());
+                st.setString(2, c.getConsulta());
+                st.setInt(3, c.getComprador().getId());
+                st.setInt(4, c.getVendedor().getId());
+                st.setInt(5, c.getProducto().getId());
+
+                st.execute();
+                inserto = true;
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+    }
+
+    public ArrayList<ReporteStockItem> obtenerReporteStockItems() {
+        String sql;
+        ArrayList<ReporteStockItem> items = new ArrayList<ReporteStockItem>();
+        try {
+            abrirConexion();
+            sql = "SELECT id_categoria, id_talle, id_genero, COUNT(*) AS cantidad\n" +
+                "FROM Productos\n" +
+                "WHERE disponible=1\n" +
+                "GROUP BY id_categoria, id_talle, id_genero";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Categoria categoria = obtenerCategoria(rs.getInt("id_categoria"));
+                Talle talle = obtenerTalle(rs.getInt("id_talle"));
+                Genero genero = obtenerGenero(rs.getInt("id_genero"));
+                int cantidad = rs.getInt("cantidad");
+
+                items.add(new ReporteStockItem(categoria, talle, genero, cantidad));
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion();
+        }
+        return items;
     }
         
     

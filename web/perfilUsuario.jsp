@@ -63,6 +63,11 @@
                                                 <button class="btn btn-danger" type="button">Eliminar</button>
                                             </a>
                                         </c:if>
+                                        <c:if test="${user.getId() == usuario}">
+                                            <a href="/TiendaVintage/VerProductoServlet?id=${producto.id}">
+                                                <button class="btn btn-info" type="button">Consultas</button>
+                                            </a>
+                                        </c:if>
                                         <c:if test="${user.getId() != usuario}">
                                             <a href="/TiendaVintage/VerProductoServlet?id=${producto.id}">
                                                 <button class="btn btn-primary" type="button">Ver</button>

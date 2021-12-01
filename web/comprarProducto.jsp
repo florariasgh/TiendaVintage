@@ -50,7 +50,7 @@
                                             <div class="form-group">
                                                 <label for="ccnumber">Credit Card Number</label>
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" placeholder="0000 0000 0000 0000" autocomplete="email">
+                                                    <input class="form-control" type="text" placeholder="0000 0000 0000 0000" autocomplete="email" />
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">
                                                             <i class="mdi mdi-credit-card"></i>

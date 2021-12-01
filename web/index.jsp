@@ -26,9 +26,9 @@
 
         <div class="container">
           <div class="carousel-caption text-start">
-            <h1>Example headline.</h1>
-            <p>Some representative placeholder content for the first slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="https://getbootstrap.com/docs/5.1/examples/carousel/#">Sign up today</a></p>
+            <h1>Nos beneficiamos todos.</h1>
+            <p>Ahorras dinero sin perder calidad y ayudas al medio ambiente</p>
+            <p><a class="btn btn-lg btn-light" href="/TiendaVintage/VerProductosServlet">Ver Productos</a></p>
     </div>
         </div>
       </div>
@@ -38,9 +38,9 @@
 
         <div class="container">
           <div class="carousel-caption">
-            <h1>Another example headline.</h1>
-            <p>Some representative placeholder content for the second slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="https://getbootstrap.com/docs/5.1/examples/carousel/#">Learn more</a></p>
+            <h1>Apoya la economia local</h1>
+            <p> </p>
+            
     </div>
         </div>
       </div>
@@ -50,9 +50,8 @@
 
         <div class="container">
           <div class="carousel-caption text-end">
-            <h1>One more for good measure.</h1>
-            <p>Some representative placeholder content for the third slide of this carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="https://getbootstrap.com/docs/5.1/examples/carousel/#">Browse gallery</a></p>
+            <h1>Ayudemos al medio ambiente</h1>
+            
     </div>
   </div>
       </div>

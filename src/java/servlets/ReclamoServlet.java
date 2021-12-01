@@ -7,26 +7,18 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.Consulta;
-import modelo.FormaDePago;
-import modelo.GestorDB;
-import modelo.Producto;
-import modelo.Venta;
 
 /**
  *
  * @author arias
  */
-@WebServlet(name = "VerProductoServlet", urlPatterns = {"/VerProductoServlet"})
-public class VerProductoServlet extends HttpServlet {
+@WebServlet(name = "ReclamoServlet", urlPatterns = {"/ReclamoServlet"})
+public class ReclamoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,17 +31,19 @@ public class VerProductoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        GestorDB g = new GestorDB();
-        String id = (String) request.getParameter("id");
-        
-        Producto p = g.obtenerProducto(Integer.parseInt(id));
-        request.setAttribute("producto", p);
-        
-        ArrayList<Consulta> consultas = g.obtenerConsultas(p.getId());
-        request.setAttribute("consultas", consultas);
-        
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/verProducto.jsp");
-        rd.forward(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ReclamoServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ReclamoServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -78,19 +72,7 @@ public class VerProductoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        GestorDB g = new GestorDB();
-        int idProducto = Integer.parseInt((String) request.getParameter("txtId"));
-        int idUsuario = (Integer) request.getSession().getAttribute("usuario");
-        String consulta = (String) request.getParameter("consulta");
-        
-        Producto p = g.obtenerProducto(idProducto);
-        java.sql.Date now = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        Consulta c = new Consulta(0, now, consulta, g.obtenerUsuario(idUsuario), p.getUsuario(), p);
-        
-        g.insertarConsulta(c);
-        //RequestDispatcher rd = getServletContext().getRequestDispatcher("/VerProductoServlet?id=" + idProducto);
-        //rd.forward(request, response);
-        response.sendRedirect("/TiendaVintage/VerProductoServlet?id=" + idProducto);
+        processRequest(request, response);
     }
 
     /**

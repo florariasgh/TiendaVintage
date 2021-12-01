@@ -126,7 +126,7 @@ public class ModificarProductoServlet extends HttpServlet {
             
             g.modificarProducto(p);
             
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/PerfilUsuarioServlet");
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/VerProductosServlet");
             rd.forward(request, response);
     }
 

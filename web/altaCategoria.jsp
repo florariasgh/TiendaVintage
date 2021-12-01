@@ -7,20 +7,15 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Cargar categorias</title>
-        <link href="./resources/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="./resources/blog.css" rel="stylesheet">
-    </head>
-    <body>
+<%@ include file="components/admin/meta.jsp" %>
+<body>
+    <%@ include file="components/admin/header.jsp" %>  
+        <div class="container-fluid">
+        <div class="row">
+    <%@ include file="components/admin/nav.jsp" %>  
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 offset-md-1">
                     <div class="well well-sm">
                         <form method="POST" action="/TiendaVintage/AltaCategoriaServlet" >
                             <fieldset>
