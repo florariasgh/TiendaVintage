@@ -833,6 +833,31 @@ public class GestorDB {
             cerrarConexion();
         } 
     }
+    
+    public Consulta obtenerConsulta(int id) {
+        String sql;
+        Consulta consulta = null;
+        try {
+                abrirConexion();
+                sql = "select * from Consultas where id=" + id;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                        String con = rs.getString("consulta");
+                        Producto producto = obtenerProducto(rs.getInt("id_producto"));
+                        Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
+                        Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
+
+                        consulta = new Consulta(rs.getInt("id"), rs.getDate("fecha"), con, comprador, vendedor, producto);
+                }
+                rs.close();
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+        return consulta;   
+    }
 
     public ArrayList<Consulta> obtenerConsultas(int id) {
         String sql;
@@ -848,7 +873,7 @@ public class GestorDB {
                         Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
                         Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
 
-                        consultas.add(new Consulta(id, rs.getDate("fecha"), consulta, comprador, vendedor, producto));
+                        consultas.add(new Consulta(rs.getInt("id"), rs.getDate("fecha"), consulta, comprador, vendedor, producto));
                 }
                 rs.close();
         } catch (SQLException ex) {
@@ -906,6 +931,54 @@ public class GestorDB {
             cerrarConexion();
         }
         return items;
+    }
+
+    Consulta buscarRespuesta(int id) {
+        String sql;
+        Consulta consulta = null;
+        try {
+            abrirConexion();
+            sql = "SELECT id, respuesta, fecha, id_comprador, id_vendedor\n" +
+                "FROM Respuestas\n" +
+                "WHERE id_consulta=" + id;
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String respuesta = rs.getString("respuesta");
+                
+                Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
+                Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
+
+                consulta = new Consulta(rs.getInt("id"), rs.getDate("fecha"), respuesta, comprador, vendedor, null);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion();
+        }
+        return consulta;
+    }
+
+    public void insertarRespuesta(Consulta respuesta, int idConsulta) {
+        boolean inserto = false;
+        try {
+                abrirConexion();
+                String sql = "INSERT INTO Respuestas (fecha,respuesta,id_comprador,id_vendedor, id_consulta) VALUES (?,?,?,?,?)";
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setDate(1, respuesta.getFecha());
+                st.setString(2, respuesta.getConsulta());
+                st.setInt(3, respuesta.getComprador().getId());
+                st.setInt(4, respuesta.getVendedor().getId());
+                st.setInt(5, idConsulta);
+
+                st.execute();
+                inserto = true;
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
     }
         
     

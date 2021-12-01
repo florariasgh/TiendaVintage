@@ -43,18 +43,33 @@
                         <h4>${consulta.comprador.nombre} ${consulta.comprador.apellido}</h4> <span>- ${consulta.fecha}</span> <br>
                         <p>${consulta.consulta}</p>
                     </div>
+                    <c:if test="${not empty consulta.respuesta}">
+                        <div class="comment col-md-11 offset-md-1 text-justify float-left">
+                            <i>Respuesta</i> <span>- ${consulta.respuesta.fecha}</span> <br>
+                            <p>${consulta.respuesta.consulta}</p>
+                        </div>
+                    </c:if>
+                    <c:if test="${producto.usuario.id == usuario && empty consulta.respuesta}">
+                        <div class="comment col-md-11 offset-md-1 text-justify float-left">
+                            <a href="/TiendaVintage/ResponderConsultaServlet?id=${consulta.id}">
+                                <button class="btn btn-primary" type="button">Responder</button>
+                            </a>
+                        </div>
+                    </c:if>
                 </c:forEach>
             </div>
-            <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4">
-                <form method="POST" action="/TiendaVintage/VerProductoServlet" >
-                    <input type="hidden" name="txtId" value="${producto.id}" />            
-                    <div class="form-group">
-                        <h4>Hacer una consulta</h4> <label for="message">Consulta</label> <textarea name="consulta" cols="30" rows="5" class="form-control"></textarea>
-                    </div>
-                    
-                    <div class="form-group"> <button type="submit" class="btn btn-dark">Realizar consulta</button> </div>
-                </form>
-            </div>
+            <c:if test="${not empty usuario && producto.usuario.id != usuario}">
+                <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4">
+                    <form method="POST" action="/TiendaVintage/VerProductoServlet" >
+                        <input type="hidden" name="txtId" value="${producto.id}" />            
+                        <div class="form-group">
+                            <h4>Hacer una consulta</h4> <label for="message">Consulta</label> <textarea name="consulta" cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+
+                        <div class="form-group"> <button type="submit" class="btn btn-dark">Realizar consulta</button> </div>
+                    </form>
+                </div>
+            </c:if>
         </div>
     </div>
 </section>                    

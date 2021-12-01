@@ -18,6 +18,7 @@ public class Consulta {
     private Usuario comprador;
     private Usuario vendedor;
     private Producto producto;
+    private Consulta respuesta;
 
     public int getId() {
         return id;
@@ -66,6 +67,19 @@ public class Consulta {
         this.comprador = comprador;
         this.vendedor = vendedor;
         this.producto = producto;
+        this.respuesta = buscarRespuesta(id);
+    }
+    
+    private Consulta buscarRespuesta(int id) {
+        return new GestorDB().buscarRespuesta(id);
+    }
+
+    public Consulta getRespuesta() {
+        return respuesta;
+    }
+
+    public void setRespuesta(Consulta respuesta) {
+        this.respuesta = respuesta;
     }
 
     public Date getFecha() {
