@@ -35,11 +35,12 @@
           </li>
           
           <li class="nav-item">
-            <a class="nav-link"href="/TiendaVintage/MisVentasServlet">Mis ventas</a>
+            <a class="nav-link" href="/TiendaVintage/MisVentasServlet">Mis ventas</a>
           </li>
                   <li class="nav-item">
             <a class="nav-link" href="/TiendaVintage/MisComprasServlet">Mis compras</a>
           </li>
+          
           
           </c:if>
                   
@@ -81,20 +82,48 @@
           
           <!-- FIN MENU PRODUCTOS -->
           
+          <!-- MENU NOSOTROS -->
+          <li class="nav-item dropdown">
+            <a href="/TiendaVintage/#" class= "nav-link dropdown-toggle" id="navbarDropdown"  role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                   Sobre nosotros
+            </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a href="/TiendaVintage/preguntasFrecuentes.jsp"
+                          class="dropdown-item">
+                             Preguntas frecuentes
+                      </a>
+                      
+                  </li>
+                  
+                  <li><a href="/TiendaVintage/terminos.jsp"
+                          class="dropdown-item">
+                             Términos y Condiciones
+                      </a>
+                      
+                  </li>
+                 
+              </ul>
+          </li>
+          
+          <!-- FIN MENU NOSOTROS -->
           
           
         </ul>
         
-        <form class="d-flex">
+        <!-- <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Buscar</button>
-        </form>
+          
+        </form> -->
+          
       <div class="col-4 d-flex justify-content-end align-items-center">
           <c:choose>
             <c:when test="${not empty usuario}">
               <a class="btn btn-sm btn-secondary" href="/TiendaVintage/LogoutServlet">Cerrar sesion</a>
            </c:when>
            <c:otherwise>
+             
              <a class="btn btn-sm btn-secondary" href="/TiendaVintage/LoginServlet">Iniciar sesion</a>
              <a class="btn btn-sm btn-secondary" href="/TiendaVintage/RegistrarUsuarioServlet">Registrate</a>
            </c:otherwise>

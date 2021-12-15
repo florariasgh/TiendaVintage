@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import servlets.ReporteVendedoresItem;
 
 
 /**
@@ -979,6 +980,84 @@ public class GestorDB {
         } finally {
                 cerrarConexion();
         }
+    }
+
+    public void insertarValoracion(Valoracion v) {
+        boolean inserto = false;
+        try {
+                abrirConexion();
+                String sql = "INSERT INTO Valoraciones(puntaje, fecha, id_venta ,id_comprador, id_vendedor) VALUES (?,?,?,?,?)";
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setInt(1, v.getPuntaje());
+                st.setDate(2, v.getFecha());
+                st.setInt(3, v.getVenta().getId());
+                st.setInt(4, v.getComprador().getId());
+                st.setInt(5, v.getVendedor().getId());
+
+                st.execute();
+                inserto = true;
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+    }
+
+    int buscarValoracion(int id) {
+        String sql;
+        int puntaje = 0;
+        try {
+            abrirConexion();
+            sql = "SELECT puntaje\n" +
+                "FROM Valoraciones\n" +
+                "WHERE id_venta=" + id;
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                puntaje = rs.getInt("puntaje");
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion();
+        }
+        return puntaje;
+    }
+
+    public ArrayList<ReporteVendedoresItem> obtenerReporteVendedores(boolean ordenPorCantidad) {
+        String sql;
+        int columnaOrden;
+        if (ordenPorCantidad) {
+            columnaOrden = 4;
+        } else {
+            columnaOrden = 3;
+        }
+        ArrayList<ReporteVendedoresItem> items = new ArrayList<ReporteVendedoresItem>();
+        try {
+            abrirConexion();
+            sql = "SELECT u.nombre, u.apellido, COALESCE(AVG(va.puntaje), 0) as valoracion, COUNT(*) AS cantidad\n" +
+                "FROM Ventas v JOIN Usuarios u ON v.id_vendedor=u.id LEFT JOIN Valoraciones va ON va.id_venta=v.id\n" +
+                "GROUP BY v.id_vendedor, u.nombre, u.apellido ORDER BY " + columnaOrden + " DESC";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String nombre = rs.getString("nombre") + " " + rs.getString("apellido");
+                int cantidad = rs.getInt("cantidad");
+                float valoracion = rs.getFloat("valoracion");
+
+                items.add(new ReporteVendedoresItem(nombre, cantidad, valoracion));
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            cerrarConexion();
+        }
+        if (!ordenPorCantidad) {
+            return new ArrayList(items.subList(0, Integer.min(items.size(), 10)));
+        }
+        return items;
     }
         
     

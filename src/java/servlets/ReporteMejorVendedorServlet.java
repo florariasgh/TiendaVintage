@@ -15,15 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.GestorDB;
-import modelo.Producto;
 import modelo.ReporteStockItem;
 
 /**
  *
  * @author arias
  */
-@WebServlet(name = "ReporteStock", urlPatterns = {"/ReporteStock"})
-public class ReporteStock extends HttpServlet {
+@WebServlet(name = "ReporteMejorVendedorServlet", urlPatterns = {"/ReporteMejorVendedorServlet"})
+public class ReporteMejorVendedorServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +36,10 @@ public class ReporteStock extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         GestorDB g = new GestorDB();
-        ArrayList<ReporteStockItem> items = null;
-        items = g.obtenerReporteStockItems();
+        ArrayList<ReporteVendedoresItem> items = null;
+        items = g.obtenerReporteVendedores(true);
         request.setAttribute("items", items);
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/reporteStock.jsp");
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/reporteVendedores.jsp");
         rd.forward(request, response);
     }
 

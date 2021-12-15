@@ -41,6 +41,16 @@
            Existencia de Productos
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/TiendaVintage/ReporteMejorVendedorServlet">
+           Vendedores con mas ventas
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/TiendaVintage/ReporteMejorValoracionesServlet">
+           Vendedores con mayor valoracion
+          </a>
+        </li>
       </ul>
     </div>
   </nav>

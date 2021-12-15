@@ -1,5 +1,5 @@
 <%-- 
-    Document   : reporteStock
+    Document   : reporteVendedores
     Created on : 30/11/2021, 17:40:36
     Author     : arias
 --%>
@@ -18,23 +18,19 @@
     <%@ include file="components/admin/nav.jsp" %>     
     <div class="col-md-8 offset-md-3">
         <div class="row">
-                <h1>Reporte de existencias de producto</h1>
+                <h1>Ranking de vendedores por cantidad de ventas</h1>
                 <canvas id="myChart" width="400" height="400"></canvas>
                 <table class="table  table-bordered">
                     <thead>
                         <tr>
-                            <th>Categoria</th>
-                            <th>Talle</th>
-                            <th>Genero</th>
+                            <th>Nombre</th>
                             <th>Cantidad</th>
                         </tr>
                     </thead>
                     <tbody>
 			<c:forEach var="item" items="${items}">
                           <tr>
-                            <td>${item.categoria.nombre}</td>
-                            <td>${item.talle.nombre}</td>
-                            <td>${item.genero.nombre}</td>
+                            <td>${item.nombre}</td>
                             <td>${item.cantidad}</td>
                           </tr>
 			</c:forEach>
@@ -44,31 +40,43 @@
     </div>
 </body>
 <script>
-    var generoDict = {};
+    function sort_object(obj) {
+        items = Object.keys(obj).map(function(key) {
+            return [key, obj[key]];
+        });
+        items.sort(function(first, second) {
+            return second[1] - first[1];
+        });
+        sorted_obj={}
+        $.each(items, function(k, v) {
+            use_key = v[0]
+            use_value = v[1]
+            sorted_obj[use_key] = use_value
+        })
+        return(sorted_obj)
+    } 
+    var vendedoresDict = {};
     $.ajax({
       async: false,
-      url: "ReportesJsonDataServlet?reporte=stock",
+      url: "ReportesJsonDataServlet?reporte=vendedores",
       dataType:"json",
-      success: function(generoJsonData) {
-        generoDict = generoJsonData;
+      success: function(vendedoresJsonData) {
+        vendedoresDict = vendedoresJsonData;
       }
     });
-    const labels = Object.keys(generoDict);
+    vendedoresDict = sort_object(vendedoresDict);
+    const labels = Object.keys(vendedoresDict);
     const data = {
         labels: labels,
         datasets: [{
-          label: 'Stock por genero',
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-            'rgb(255, 205, 86)'
-          ],
-          data: Object.values(generoDict)
+          label: 'Vendedores con mas ventas',
+          data: Object.values(vendedoresDict),
+          backgroundColor: 'rgb(255, 99, 132)'
         }],
         hoverOffset: 4
     };
     const config = {
-        type: 'doughnut',
+        type: 'bar',
         data: data,
         options: {
             responsive: false,

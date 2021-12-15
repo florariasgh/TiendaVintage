@@ -17,6 +17,7 @@
 		<table class="table">
                             <thead>
                                 <tr>
+                                    <th scope="col">Fecha</th>
                                     <th scope="col">Articulo</th>
                                     <th scope="col">Precio</th>
                                     <th scope="col">Vendedor</th>
@@ -28,21 +29,26 @@
                         <tbody>
 			<c:forEach var="compra" items="${lista}">
 				<tr>
+                                    <td>${compra.fecha}</td>
                                     <td>${compra.producto.nombre}</td>
                                     <td>$ ${compra.producto.precio}</td>
                                     <td>${compra.vendedor.nombre}  ${compra.vendedor.apellido}</td>
                                     <td>${compra.vendedor.email}</td>
                                     <td>
-                                        <select name="cboValoracion${producto.id}" >
-                                            <option value='5'>⭐⭐⭐⭐⭐</option>
-                                            <option value='4'>⭐⭐⭐⭐</option>
-                                            <option value='3'>⭐⭐⭐</option>
-                                            <option value='2'>⭐⭐</option>
-                                            <option value='1'>⭐</option>
-                                        </select>
-                                        <a href="javascript:guardarValoracion(${producto.id});">
-                                            <button class="btn btn-primary" type="button">Enviar</button>
-                                        </a>
+                                        <c:choose>
+                                            <c:when test="${compra.cancelado == true}">
+                                                <i>Compra cancelada</i>
+                                            </c:when>
+                                            <c:when test="${compra.valoracion == 0}">
+                                                <a href="/TiendaVintage/ValorarCompraServlet?id=${compra.id}">
+                                                    <button class="btn btn-success" type="button">Calificar</button>
+                                                </a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:forEach var="starCounter" begin="1" end="${compra.valoracion}">⭐</c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        
                                     </td>
                                     <td>
                                         <button class="btn btn-danger" type="button">Reclamar</button>
@@ -54,10 +60,4 @@
             </div>
          
 </div>
-<script>
-    function guardarValoracion(id) {
-        console.log(id);
-        return "/TiendaVintage/GuardarValoracion?id=" + id + "&valoracion=" + $(`select[name="cboValoracion${producto.id}"]`).value;
-    }
-    </script>
 <%@ include file="components/footer.jsp" %>

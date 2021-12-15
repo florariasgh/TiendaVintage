@@ -19,6 +19,7 @@ public class Venta {
     private Usuario comprador;
     private Usuario vendedor;
     private boolean cancelado;
+    private int valoracion;
 
     public Venta(int id, Date fecha, Producto producto, FormaDePago formaDePago, Usuario comprador, Usuario vendedor, boolean cancelado) {
         this.id = id;
@@ -28,6 +29,19 @@ public class Venta {
         this.comprador = comprador;
         this.vendedor = vendedor;
         this.cancelado = cancelado;
+        this.valoracion = buscarValoracion(id);
+    }
+
+    public int getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(int valoracion) {
+        this.valoracion = valoracion;
+    }
+    
+    public int buscarValoracion(int id) {
+        return new GestorDB().buscarValoracion(id);
     }
 
     public int getId() {

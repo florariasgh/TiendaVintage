@@ -17,6 +17,7 @@
         <table class="table">
                     <thead>
                         <tr>
+                            <th scope="col">Fecha</th>
                             <th scope="col">Articulo</th>
                             <th scope="col">Precio</th>
                             <th scope="col">Cliente</th>
@@ -27,6 +28,7 @@
                 <tbody>
                 <c:forEach var="venta" items="${lista}">
                         <tr>
+                            <td>${venta.fecha}</td>
                             <td>${venta.producto.nombre}</td>
                             <td>$ ${venta.producto.precio}</td>
                             <td>${venta.comprador.nombre}  ${venta.comprador.apellido}</td>
@@ -37,9 +39,17 @@
                                         <button class="btn btn-danger" type="button">Cancelar venta</button>
                                     </a>
                                 </c:if>
-                                <c:if test="${venta.cancelado == true}">
-                                    <i>Venta cancelada</i>
-                                </c:if>
+                                <c:choose>
+                                    <c:when test="${venta.cancelado == true}">
+                                        <i>Venta cancelada</i>
+                                    </c:when>
+                                    <c:when test="${venta.valoracion == 0}">
+                                        <i>Calificacion pendiente</i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach var="starCounter" begin="1" end="${venta.valoracion}">⭐</c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
                         </tr>
                 </c:forEach>
