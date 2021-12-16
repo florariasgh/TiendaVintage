@@ -44,7 +44,7 @@ public class CancelarVentaServlet extends HttpServlet {
         
         Venta v = g.obtenerVenta(Integer.parseInt(id));
         Producto p = v.getProducto();
-        p.setDisponible(false);
+        p.setDisponible(true);
         g.actualizarProducto(p);
         v.setCancelado(true);
         g.actualizarVenta(v);

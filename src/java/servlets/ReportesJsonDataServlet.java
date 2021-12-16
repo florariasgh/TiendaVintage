@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +39,22 @@ public class ReportesJsonDataServlet extends HttpServlet {
         String json = null;
         if (request.getParameter("reporte").equals("stock")) {
             json = reporteStockPorGenero();
-        } else if (request.getParameter("reporte").equals("vendedores")) {
-            json = reporteVendedores(false);
         } else {
-            json = reporteVendedores(true);
+            java.sql.Date fechaDesde = null;
+            java.sql.Date fechaHasta = null;
+            String desde = (String) request.getParameter("desde");
+            String hasta = (String) request.getParameter("hasta");
+            try {
+                fechaDesde = new java.sql.Date(new SimpleDateFormat("dd/MM/yyyy").parse(desde).getTime());
+                fechaHasta = new java.sql.Date(new SimpleDateFormat("dd/MM/yyyy").parse(hasta).getTime());
+            } catch (ParseException ex) {
+                fechaDesde = null;
+            }
+            if (request.getParameter("reporte").equals("vendedores")) {
+                json = reporteVendedores(false, fechaDesde, fechaHasta);
+            } else {
+                json = reporteVendedores(true, fechaDesde, fechaHasta);
+            }
         }
         response.setContentType("application/json");
         response.getWriter().write(json);
@@ -64,17 +78,17 @@ public class ReportesJsonDataServlet extends HttpServlet {
         return gson.toJson(itemsPorGenero);
     }
     
-    private String reporteVendedores(boolean valoracion) {
+    private String reporteVendedores(boolean valoracion, java.sql.Date desde, java.sql.Date hasta) {
         GestorDB g = new GestorDB();
         Map vendedores;
         if (valoracion) {
             vendedores = new HashMap<String, Float>();
-            for (ReporteVendedoresItem item : g.obtenerReporteVendedores(false)) {
+            for (ReporteVendedoresItem item : g.obtenerReporteVendedores(false, desde, hasta)) {
                 vendedores.put(item.getNombre(), item.getValoracion());
             }
         } else {
             vendedores = new HashMap<String, Integer>();
-            for (ReporteVendedoresItem item : g.obtenerReporteVendedores(true)) {
+            for (ReporteVendedoresItem item : g.obtenerReporteVendedores(true, desde, hasta)) {
                 vendedores.put(item.getNombre(), item.getCantidad());
             }
         }

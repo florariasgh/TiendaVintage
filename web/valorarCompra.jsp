@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <%@ include file="components/meta.jsp" %>     
@@ -24,7 +25,7 @@
                           <p class="card-text">${compra.producto.descripcion}</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                          <li class="list-group-item">$ ${compra.producto.precio}</li>
+                          <li class="list-group-item">$ <fmt:formatNumber pattern="#,##0" value="${compra.producto.precio}" /></li>
                           <li class="list-group-item">${compra.producto.usuario.nombre} ${compra.producto.usuario.apellido}</li>
                         </ul>
                    </div>

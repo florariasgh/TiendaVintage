@@ -1025,19 +1025,24 @@ public class GestorDB {
         return puntaje;
     }
 
-    public ArrayList<ReporteVendedoresItem> obtenerReporteVendedores(boolean ordenPorCantidad) {
+    public ArrayList<ReporteVendedoresItem> obtenerReporteVendedores(boolean ordenPorCantidad, java.sql.Date desde, java.sql.Date hasta) {
         String sql;
         int columnaOrden;
+        String dateCondition = "";
         if (ordenPorCantidad) {
             columnaOrden = 4;
         } else {
             columnaOrden = 3;
+        }
+        if (desde != null) {
+            dateCondition = "WHERE v.fecha BETWEEN '" + desde.toString() + "' AND '" + hasta.toString() + "'\n";
         }
         ArrayList<ReporteVendedoresItem> items = new ArrayList<ReporteVendedoresItem>();
         try {
             abrirConexion();
             sql = "SELECT u.nombre, u.apellido, COALESCE(AVG(va.puntaje), 0) as valoracion, COUNT(*) AS cantidad\n" +
                 "FROM Ventas v JOIN Usuarios u ON v.id_vendedor=u.id LEFT JOIN Valoraciones va ON va.id_venta=v.id\n" +
+                dateCondition +  
                 "GROUP BY v.id_vendedor, u.nombre, u.apellido ORDER BY " + columnaOrden + " DESC";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);

@@ -3,6 +3,7 @@
     Created on : 17/11/2021, 14:55:42
     Author     : arias
 --%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
                     </div>
                     <div class="part-2">
                         <h3 class="product-title">${producto.nombre}</h3>
-                        <h3 class="product-price">${producto.precio}</h3>
+                        <h3 class="product-price">$ <fmt:formatNumber pattern="#,##0" value="${producto.precio}" /></h3>
                         <h3 class="product-descripcion">${producto.descripcion}</h3>
                         <h3 class="product-genero">${producto.genero.nombre}</h3>
                         <h3 class="product-usuario"><a href="/TiendaVintage/PerfilUsuarioServlet?id=${producto.usuario.id}">${producto.usuario.nombre}</a></h3>

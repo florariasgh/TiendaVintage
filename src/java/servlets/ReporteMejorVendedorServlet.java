@@ -7,7 +7,11 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,7 +41,7 @@ public class ReporteMejorVendedorServlet extends HttpServlet {
             throws ServletException, IOException {
         GestorDB g = new GestorDB();
         ArrayList<ReporteVendedoresItem> items = null;
-        items = g.obtenerReporteVendedores(true);
+        items = g.obtenerReporteVendedores(true, null, null);
         request.setAttribute("items", items);
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/reporteVendedores.jsp");
         rd.forward(request, response);
@@ -69,7 +73,34 @@ public class ReporteMejorVendedorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        GestorDB g = new GestorDB();
+        java.sql.Date fechaDesde = null;
+        java.sql.Date fechaHasta = null;
+        
+        ArrayList<ReporteVendedoresItem> items = null;
+        
+        String desde = (String) request.getParameter("desde");
+        String hasta = (String) request.getParameter("hasta");
+        try {
+            fechaDesde = new java.sql.Date(new SimpleDateFormat("dd/MM/yyyy").parse(desde).getTime());
+            fechaHasta = new java.sql.Date(new SimpleDateFormat("dd/MM/yyyy").parse(hasta).getTime());
+        } catch (ParseException ex) {
+            request.setAttribute("error", "Las fechas ingresadas no son correctas.");
+            desde = "";
+            hasta = "";
+            fechaDesde = null;
+        }
+        
+        items = g.obtenerReporteVendedores(true, fechaDesde, fechaHasta);
+        request.setAttribute("initialDesde", desde);
+        request.setAttribute("initialHasta", hasta);
+        
+        request.setAttribute("items", items);
+        if (items.isEmpty()) {
+            request.setAttribute("error", "No existen ventas en el periodo ingresado.");
+        }
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/reporteVendedores.jsp");
+        rd.forward(request, response);
     }
 
     /**

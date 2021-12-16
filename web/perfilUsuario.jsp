@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <%@ include file="components/meta.jsp" %>     
@@ -47,7 +48,7 @@
 				<tr>
                                     <td>${producto.nombre}</td>
                                     <td>${producto.categoria.nombre}</td>
-                                    <td>$ ${producto.precio}</td>
+                                    <td>$ <fmt:formatNumber pattern="#,##0" value="${producto.precio}" /></td>
                                     <td>${producto.descripcion}</td>
                                     <td>${producto.talle.nombre}</td>
                                     <td>${producto.genero.nombre}</td>

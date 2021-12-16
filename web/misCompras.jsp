@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <%@ include file="components/meta.jsp" %>     
@@ -31,7 +32,7 @@
 				<tr>
                                     <td>${compra.fecha}</td>
                                     <td>${compra.producto.nombre}</td>
-                                    <td>$ ${compra.producto.precio}</td>
+                                    <td>$ <fmt:formatNumber pattern="#,##0" value="${compra.producto.precio}" /></td>
                                     <td>${compra.vendedor.nombre}  ${compra.vendedor.apellido}</td>
                                     <td>${compra.vendedor.email}</td>
                                     <td>

@@ -10,6 +10,8 @@
 <!DOCTYPE html>
 <%@ include file="components/admin/meta.jsp" %>>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- BODY -->
 <%@ include file="components/admin/header.jsp" %>  
@@ -17,8 +19,26 @@
         <div class="row">
     <%@ include file="components/admin/nav.jsp" %>     
     <div class="col-md-8 offset-md-3">
+        <h1>Reporte de 10 mejores vendedores por valoracion</h1>
+        <c:if test="${not empty error}">
+            <p style='color:red;'>${error}</p>	
+        </c:if>
+        <form method="POST" action="ReporteMejorValoracionesServlet"> 
+            <div class="row">
+                <div class="form-group col-md-5">
+                    <label for="fechaDesde">Desde</label>
+                    <input type="text" name="desde" value="${initialDesde}" class="form-control" id="fechaDesde" placeholder="">
+                  </div>
+                <div class="form-group col-md-5">
+                    <label for="fechaHasta">Hasta</label>
+                    <input type="text" name="hasta" value="${initialHasta}" class="form-control" id="fechaHasta" placeholder="">
+                  </div>
+                <div class="form-group col-md-2 p-4">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </form>
         <div class="row">
-                <h1>Reporte de 10 mejores vendedores por valoracion</h1>
                 <canvas id="myChart" width="400" height="400"></canvas>
                 <table class="table  table-bordered">
                     <thead>
@@ -40,6 +60,10 @@
     </div>
 </body>
 <script>
+    $( function() {
+        $( "#fechaDesde" ).datepicker({ dateFormat: 'dd/mm/yy' });
+        $( "#fechaHasta" ).datepicker({ dateFormat: 'dd/mm/yy' });
+      } );
     function sort_object(obj) {
         items = Object.keys(obj).map(function(key) {
             return [key, obj[key]];
@@ -58,7 +82,7 @@
     var vendedoresDict = {};
     $.ajax({
       async: false,
-      url: "ReportesJsonDataServlet?reporte=valoraciones",
+      url: "ReportesJsonDataServlet?reporte=valoraciones&desde=" + $("#fechaDesde").val() + "&hasta=" + $("#fechaHasta").val(),
       dataType:"json",
       success: function(vendedoresJsonData) {
         vendedoresDict = vendedoresJsonData;
