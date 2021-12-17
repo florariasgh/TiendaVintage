@@ -21,7 +21,9 @@
                     <h5 class="mt-2 mb-0">${user.getNombre()} ${user.getApellido()}</h5>
                     <span>${user.getEmail()}</span>
                     <c:if test="${user.getId() == usuario}">
-                        <div class="buttons"> <button class="btn btn-outline-primary px-4">Editar perfil</button></div>
+                        <a href="/TiendaVintage/EditarPerfilServlet">
+                            <div class="buttons"> <button class="btn btn-outline-primary px-4">Editar perfil</button></div>
+                        </a>
                     </c:if>
                 </div>
             </div>

@@ -7,25 +7,24 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.util.Calendar;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.FormaDePago;
 import modelo.GestorDB;
-import modelo.Producto;
-import modelo.Venta;
-
+import modelo.Usuario;
 /**
  *
  * @author arias
  */
-@WebServlet(name = "ComprarServlet", urlPatterns = {"/ComprarServlet"})
-public class ComprarServlet extends HttpServlet {
+@WebServlet(name = "EditarPerfilServlet", urlPatterns = {"/EditarPerfilServlet"})
+public class EditarPerfilServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,22 +36,18 @@ public class ComprarServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (request.getSession().getAttribute("usuario") != null) {
-            GestorDB g = new GestorDB();
-            String id = (String) request.getParameter("id");
-
-            Producto p = g.obtenerProducto(Integer.parseInt(id));
-            request.setAttribute("producto", p);
-
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/comprarProducto.jsp");
-            rd.forward(request, response);
-        } else {
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-            rd.forward(request, response);
+             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+                GestorDB g = new GestorDB();
+                Usuario usuario = g.obtenerUsuario((Integer)request.getSession().getAttribute("usuario")); 
+                request.setAttribute("nombre", usuario.getNombre());
+                request.setAttribute("apellido", usuario.getApellido());
+                request.setAttribute("telefono", usuario.getTelefono());
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/editarPerfil.jsp");
+		rd.forward(request, response);
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -79,22 +74,24 @@ public class ComprarServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        GestorDB g = new GestorDB();
-        int id = Integer.parseInt((String) request.getParameter("id"));
-        int idUsuario = (Integer) request.getSession().getAttribute("usuario");
-        
-        Producto p = g.obtenerProducto(id);
-        request.setAttribute("producto", p);
-        
-        p.setDisponible(false);
-        g.actualizarProducto(p);
-        java.sql.Date now = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        g.insertarVenta(new Venta(0, now, p, new FormaDePago(5,""), g.obtenerUsuario(idUsuario), p.getUsuario(), false));
-         
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/compraRealizada.jsp");
-        rd.forward(request, response);
-    }
+            GestorDB g = new GestorDB();
 
+            String nombre = request.getParameter("nombre");
+            String apellido = request.getParameter("apellido");
+            String telefono = request.getParameter("telefono");
+            String clave = request.getParameter("clave");
+           
+            Usuario usuario = g.obtenerUsuario((Integer)request.getSession().getAttribute("usuario")); 
+            usuario.setNombre(nombre);
+            usuario.setApellido(apellido);
+            usuario.setTelefono(telefono);
+            
+            g.actualizarUsuario(usuario, clave);
+
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/PerfilUsuarioServlet");
+            rd.forward(request, response);
+
+    }
     /**
      * Returns a short description of the servlet.
      *

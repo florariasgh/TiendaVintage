@@ -42,7 +42,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label for="name">Name</label>
-                                                <input class="form-control" id="name" type="text" placeholder="Enter your name">
+                                                <input class="form-control" id="txtNombre" type="text" placeholder="Enter your name">
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +51,7 @@
                                             <div class="form-group">
                                                 <label for="ccnumber">Credit Card Number</label>
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" placeholder="0000 0000 0000 0000" autocomplete="email" />
+                                                    <input class="form-control" type="text" id="txtCredit" placeholder="0000 0000 0000 0000" />
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">
                                                             <i class="mdi mdi-credit-card"></i>
@@ -99,7 +99,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label for="cvv">CVV/CVC</label>
-                                                <input class="form-control" id="cvv" type="text" placeholder="123">
+                                                <input class="form-control" id="txtCVV" type="text" placeholder="123">
                                             </div>
                                         </div>
                                     </div>
@@ -120,3 +120,23 @@
     </div>
 </body>
 <%@ include file="components/footer.jsp" %>
+<script>
+            function validar() {
+                    let txtNombre = document.getElementById("txtNombre").value;
+                    if (!txtNombre) {
+                            alert("Debe incluir su nombre como aparece en la tarjeta");
+                            return false;
+                    }
+                    let txtCredit = document.getElementById("txtCredit").value;
+                    if (!txtCredit || txtCredit.length != 16) {
+                            alert("El numero de tarjeta ingresado no es valido");
+                            return false;
+                    }
+                    let txtCVV = document.getElementById("txtCVV").value;
+                    if (!txtCVV || txtClave.length != 3) {
+                            alert("Debe incluir un CVV valido");
+                            return false;
+                    }
+                    return true;    
+            }
+    </script>

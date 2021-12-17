@@ -25,7 +25,9 @@
                         <h3 class="product-descripcion">${producto.descripcion}</h3>
                         <h3 class="product-genero">${producto.genero.nombre}</h3>
                         <h3 class="product-usuario"><a href="/TiendaVintage/PerfilUsuarioServlet?id=${producto.usuario.id}">${producto.usuario.nombre}</a></h3>
-                        <a href="/TiendaVintage/ComprarServlet?id=${producto.id}" ><button type="button" class="btn btn-dark">Comprar</button></a>
+                        <c:if test="${not empty usuario}">
+                            <a href="/TiendaVintage/ComprarServlet?id=${producto.id}" ><button type="button" class="btn btn-dark">Comprar</button></a>
+                        </c:if>
                     </div>
                 </div>
             </div>

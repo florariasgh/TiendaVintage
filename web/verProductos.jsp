@@ -26,7 +26,9 @@
                                 <h3 class="product-title">${producto.nombre}</h3>
                                 <h4 class="product-price">$ <fmt:formatNumber pattern="#,##0" value="${producto.precio}" /></h4>
                                 <a href="/TiendaVintage/VerProductoServlet?id=${producto.id}" ><button type="button" class="btn btn-info">Ver</button></a>
-                                <a href="/TiendaVintage/ComprarServlet?id=${producto.id}" ><button type="button" class="btn btn-dark">Comprar</button></a>
+                                <c:if test="${not empty usuario}">
+                                    <a href="/TiendaVintage/ComprarServlet?id=${producto.id}" ><button type="button" class="btn btn-dark">Comprar</button></a>
+                                </c:if>
                             </div>
                         </div>
                     </div>

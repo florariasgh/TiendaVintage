@@ -1064,6 +1064,29 @@ public class GestorDB {
         }
         return items;
     }
+
+    public void actualizarUsuario(Usuario usuario, String clave) {
+        String cadenaClave = "";
+        if (!clave.equals("")) {
+            cadenaClave = ", clave='" + clave + "'";
+        }
+        try {
+                abrirConexion();
+                String sql = "UPDATE Usuarios SET " +
+                        "nombre=?, apellido=?, telefono=?" + cadenaClave +
+                        " WHERE id=?";
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setString(1, usuario.getNombre());
+                st.setString(2, usuario.getApellido());
+                st.setString(3, usuario.getTelefono());
+                st.setInt(4, usuario.getId());
+                st.execute();
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+    }
         
     
 }
