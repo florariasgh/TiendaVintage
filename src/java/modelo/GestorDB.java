@@ -691,8 +691,13 @@ public class GestorDB {
                         Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
                         Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
                         boolean cancelado = rs.getBoolean("cancelado");
+                        Reclamo reclamo = obtenerReclamoPorVenta(id);
+                        String descripcionReclamo = "";
+                        if (reclamo != null) {
+                            descripcionReclamo = reclamo.getDescripcion();
+                        }
 
-                        lista.add(new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado));
+                        lista.add(new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado, descripcionReclamo));
                 }
                 rs.close();
         } catch (SQLException ex) {
@@ -719,8 +724,13 @@ public class GestorDB {
                         Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
                         Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
                         boolean cancelado = rs.getBoolean("cancelado");
-
-                        lista.add(new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado));
+                        Reclamo reclamo = obtenerReclamoPorVenta(id);
+                        String descripcionReclamo = "";
+                        if (reclamo != null) {
+                            descripcionReclamo = reclamo.getDescripcion();
+                        }
+                        
+                        lista.add(new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado, descripcionReclamo));
                 }
                 rs.close();
         } catch (SQLException ex) {
@@ -800,8 +810,13 @@ public class GestorDB {
                         Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
                         Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
                         boolean cancelado = rs.getBoolean("cancelado");
+                        Reclamo reclamo = obtenerReclamoPorVenta(id);
+                        String descripcionReclamo = "";
+                        if (reclamo != null) {
+                            descripcionReclamo = reclamo.getDescripcion();
+                        }
 
-                        venta = new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado);
+                        venta = new Venta(id, fecha, producto, formaDePago, comprador, vendedor, cancelado, descripcionReclamo);
                 }
                 rs.close();
         } catch (SQLException ex) {
@@ -896,6 +911,26 @@ public class GestorDB {
                 st.setInt(3, c.getComprador().getId());
                 st.setInt(4, c.getVendedor().getId());
                 st.setInt(5, c.getProducto().getId());
+
+                st.execute();
+                inserto = true;
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+    }
+    
+    public void insertarReclamo(Reclamo r) {
+        boolean inserto = false;
+        try {
+                abrirConexion();
+                String sql = "INSERT INTO Reclamos (descripcion,id_venta,id_comprador,id_vendedor) VALUES (?,?,?,?)";
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setString(1, r.getDescripcion());
+                st.setInt(2, r.getVenta().getId());
+                st.setInt(3, r.getComprador().getId());
+                st.setInt(4, r.getVendedor().getId());
 
                 st.execute();
                 inserto = true;
@@ -1086,6 +1121,33 @@ public class GestorDB {
         } finally {
                 cerrarConexion();
         }
+    }
+
+    private Reclamo obtenerReclamoPorVenta(int id) {
+        String sql;
+        Reclamo reclamo = null;
+        try {
+                abrirConexion();
+                sql = "select * from Reclamos where id_venta=" + id;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                    int idReclamo = rs.getInt("id");
+                    String descripcion = rs.getString("descripcion");
+                    Usuario comprador = obtenerUsuario(rs.getInt("id_comprador"));
+                    Usuario vendedor = obtenerUsuario(rs.getInt("id_vendedor"));
+                    Venta venta = new Venta();
+                    venta.setId(id);
+
+                    reclamo = new Reclamo(id, descripcion, venta, comprador, vendedor);
+                }
+                rs.close();
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+        } finally {
+                cerrarConexion();
+        }
+        return reclamo;
     }
         
     

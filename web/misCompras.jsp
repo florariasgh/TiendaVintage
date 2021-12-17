@@ -24,7 +24,7 @@
                                     <th scope="col">Vendedor</th>
                                     <th scope="col">Email vendedor</th>
                                     <th scope="col">Calificar compra</th>
-                                    <th scope="col">Realizar reclamo</th>
+                                    <th scope="col">Reclamo</th>
                                 </tr>
                             </thead>
                         <tbody>
@@ -49,10 +49,16 @@
                                                 <c:forEach var="starCounter" begin="1" end="${compra.valoracion}">⭐</c:forEach>
                                             </c:otherwise>
                                         </c:choose>
-                                        
                                     </td>
                                     <td>
-                                        <button class="btn btn-danger" type="button">Reclamar</button>
+                                        <c:choose> 
+                                            <c:when test="${(compra.valoracion == 0 || compra.cancelado == true) && compra.reclamo == ''}">
+                                                <a href="/TiendaVintage/ReclamoServlet?id=${compra.id}">
+                                                    <button class="btn btn-danger" type="button">Reclamar</button>
+                                                </a>
+                                            </c:when>
+                                            <c:otherwise>${compra.reclamo}</c:otherwise>
+                                        </c:choose>
                                     </td>
 				</tr>
 			</c:forEach>

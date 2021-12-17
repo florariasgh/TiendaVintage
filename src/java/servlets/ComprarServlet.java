@@ -89,7 +89,7 @@ public class ComprarServlet extends HttpServlet {
         p.setDisponible(false);
         g.actualizarProducto(p);
         java.sql.Date now = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        g.insertarVenta(new Venta(0, now, p, new FormaDePago(5,""), g.obtenerUsuario(idUsuario), p.getUsuario(), false));
+        g.insertarVenta(new Venta(0, now, p, new FormaDePago(5,""), g.obtenerUsuario(idUsuario), p.getUsuario(), false, null));
          
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/compraRealizada.jsp");
         rd.forward(request, response);

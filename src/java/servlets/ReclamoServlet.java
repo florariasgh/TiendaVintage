@@ -7,11 +7,18 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modelo.Consulta;
+import modelo.GestorDB;
+import modelo.Producto;
+import modelo.Reclamo;
+import modelo.Venta;
 
 /**
  *
@@ -31,19 +38,14 @@ public class ReclamoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ReclamoServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ReclamoServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        GestorDB g = new GestorDB();
+        String id = (String) request.getParameter("id");
+        
+        Venta c = g.obtenerVenta(Integer.parseInt(id));
+        request.setAttribute("compra", c);
+        
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/reclamo.jsp");
+        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -72,7 +74,16 @@ public class ReclamoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        GestorDB g = new GestorDB();
+        String id = (String) request.getParameter("id");
+        String reclamo = request.getParameter("reclamo");
+        
+        Venta compra = g.obtenerVenta(Integer.parseInt(id));
+        Reclamo r = new Reclamo(0, reclamo, compra, compra.getComprador(), compra.getVendedor());
+        g.insertarReclamo(r);
+        
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/MisComprasServlet");
+        rd.forward(request, response);
     }
 
     /**

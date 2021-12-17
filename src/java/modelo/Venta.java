@@ -20,8 +20,17 @@ public class Venta {
     private Usuario vendedor;
     private boolean cancelado;
     private int valoracion;
+    private String reclamo;
 
-    public Venta(int id, Date fecha, Producto producto, FormaDePago formaDePago, Usuario comprador, Usuario vendedor, boolean cancelado) {
+    public String getReclamo() {
+        return reclamo;
+    }
+
+    public void setReclamo(String reclamo) {
+        this.reclamo = reclamo;
+    }
+
+    public Venta(int id, Date fecha, Producto producto, FormaDePago formaDePago, Usuario comprador, Usuario vendedor, boolean cancelado, String reclamo) {
         this.id = id;
         this.fecha = fecha;
         this.producto = producto;
@@ -30,6 +39,7 @@ public class Venta {
         this.vendedor = vendedor;
         this.cancelado = cancelado;
         this.valoracion = buscarValoracion(id);
+        this.reclamo = reclamo;
     }
 
     public int getValoracion() {
@@ -38,6 +48,9 @@ public class Venta {
 
     public void setValoracion(int valoracion) {
         this.valoracion = valoracion;
+    }
+
+    public Venta() {
     }
     
     public int buscarValoracion(int id) {

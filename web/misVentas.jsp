@@ -24,6 +24,8 @@
                             <th scope="col">Cliente</th>
                             <th scope="col">Email cliente</th>
                             <th scope="col">Calificacion</th>
+                            <th scope="col">Cancelar</th>
+                            <th scope="col">Reclamo</th>
                         </tr>
                     </thead>
                 <tbody>
@@ -35,11 +37,6 @@
                             <td>${venta.comprador.nombre}  ${venta.comprador.apellido}</td>
                             <td>${venta.comprador.email}</td>
                             <td>
-                                <c:if test="${user.getId() != usuario and venta.cancelado != true}">
-                                    <a href="/TiendaVintage/CancelarVentaServlet?id=${venta.id}">
-                                        <button class="btn btn-danger" type="button">Cancelar venta</button>
-                                    </a>
-                                </c:if>
                                 <c:choose>
                                     <c:when test="${venta.cancelado == true}">
                                         <i>Venta cancelada</i>
@@ -51,6 +48,18 @@
                                         <c:forEach var="starCounter" begin="1" end="${venta.valoracion}">⭐</c:forEach>
                                     </c:otherwise>
                                 </c:choose>
+                            </td>
+                            <td>
+                                <c:if test="${user.getId() != usuario and venta.cancelado != true}">
+                                    <a href="/TiendaVintage/CancelarVentaServlet?id=${venta.id}">
+                                        <button class="btn btn-danger" type="button">Cancelar venta</button>
+                                    </a>
+                                </c:if>
+                            </td>
+                            <td>
+                                <c:if test="${venta.reclamo != ''}">
+                                    ${venta.reclamo}
+                                </c:if>    
                             </td>
                         </tr>
                 </c:forEach>
